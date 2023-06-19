@@ -21,7 +21,7 @@ use external_storage::grpc_client;
 pub use external_storage::{
     compression_reader_dispatcher, encrypt_wrap_reader, read_external_storage_info_buff,
     read_external_storage_into_file, record_storage_create, BackendConfig, ExternalData,
-    ExternalStorage, HdfsStorage, LocalStorage, NoopStorage, RestoreConfig, UnpinReader,
+    ExternalStorage, HdfsStorage, XbsaStorage, LocalStorage, NoopStorage, RestoreConfig, UnpinReader,
     MIN_READ_SPEED,
 };
 #[cfg(feature = "cloud-gcp")]
@@ -176,6 +176,10 @@ fn create_backend_inner(
         Backend::Hdfs(hdfs) => {
             Box::new(HdfsStorage::new(&hdfs.remote, backend_config.hdfs_config)?)
         }
+        Backend:: Xbsa(xbsa) => {
+            info!("----create_backend_inner::XbsaStorage::new");
+            Box::new(XbsaStorage::new(&xbsa.remote, backend_config.xbsa_config)?)
+        }
         Backend::Noop(_) => {
             Box::<external_storage::NoopStorage>::default() as Box<dyn ExternalStorage>
         }
@@ -225,6 +229,12 @@ pub fn make_local_backend(path: &Path) -> StorageBackend {
 pub fn make_hdfs_backend(remote: String) -> StorageBackend {
     let mut backend = StorageBackend::default();
     backend.mut_hdfs().set_remote(remote);
+    backend
+}
+
+pub fn make_xbsa_backend(remote: String) -> StorageBackend {
+    let mut backend = StorageBackend::default();
+    backend.mut_xbsa().set_remote(remote);
     backend
 }
 

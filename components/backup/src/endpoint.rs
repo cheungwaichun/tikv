@@ -12,7 +12,7 @@ use async_channel::SendError;
 use causal_ts::{CausalTsProvider, CausalTsProviderImpl};
 use concurrency_manager::ConcurrencyManager;
 use engine_traits::{name_to_cf, raw_ttl::ttl_current_ts, CfName, KvEngine, SstCompressionType};
-use external_storage::{BackendConfig, HdfsConfig};
+use external_storage::{BackendConfig, HdfsConfig, XbsaConfig};
 use external_storage_export::{create_storage, ExternalStorage};
 use futures::{channel::mpsc::*, executor::block_on};
 use kvproto::{
@@ -876,6 +876,10 @@ impl<E: Engine, R: RegionInfoProvider + Clone + 'static> Endpoint<E, R> {
                     .hadoop
                     .linux_user
                     .clone(),
+            },
+            xbsa_config: XbsaConfig {
+                bsa_service_host: String::from("BSA_SERVICE_HOST=http://192.168.144.143:50305/"),
+                bsa_policy: String::from("BSA_POLICY=0c04b35ecf9711ed8000000c296f9596"),
             },
         }
     }

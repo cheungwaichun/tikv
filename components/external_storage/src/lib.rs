@@ -33,6 +33,9 @@ use tokio::time::timeout;
 
 mod hdfs;
 pub use hdfs::{HdfsConfig, HdfsStorage};
+mod xbsa;
+pub use xbsa::{XbsaConfig, XbsaStorage};
+// mod dylib_client;
 pub mod local;
 pub use local::LocalStorage;
 mod noop;
@@ -64,6 +67,7 @@ pub type ExternalData<'a> = Box<dyn AsyncRead + Unpin + Send + 'a>;
 pub struct BackendConfig {
     pub s3_multi_part_size: usize,
     pub hdfs_config: HdfsConfig,
+    pub xbsa_config: XbsaConfig,
 }
 
 #[derive(Debug, Default)]

@@ -15,7 +15,7 @@ name = "external_storage_export"
 # crate-type = ["lib", "cdylib"]
 
 [features]
-default = ["cloud-gcp", "cloud-aws", "cloud-azure"]
+default = ["cloud-gcp", "cloud-aws", "cloud-azure", "slog-global", "slog"]
 cloud-aws = ["aws"]
 cloud-gcp = ["gcp"]
 cloud-azure = ["azure"]

@@ -13,7 +13,7 @@ use external_storage_export::make_gcs_backend;
 #[cfg(feature = "cloud-aws")]
 use external_storage_export::make_s3_backend;
 use external_storage_export::{
-    create_storage, make_cloud_backend, make_hdfs_backend, make_local_backend, make_noop_backend,
+    create_storage, make_cloud_backend, make_hdfs_backend, make_xbsa_backend, make_local_backend, make_noop_backend,
     ExternalStorage, UnpinReader,
 };
 use futures_util::io::{copy, AllowStdIo};
@@ -29,6 +29,7 @@ arg_enum! {
         Noop,
         Local,
         Hdfs,
+        Xbsa,
         S3,
         GCS,
         Azure,
@@ -225,6 +226,7 @@ fn process() -> Result<()> {
             StorageType::Noop => make_noop_backend(),
             StorageType::Local => make_local_backend(Path::new(&opt.path.unwrap())),
             StorageType::Hdfs => make_hdfs_backend(opt.path.unwrap()),
+            StorageType::Xbsa => make_xbsa_backend(opt.path.unwrap()),
             StorageType::S3 => create_s3_storage(&opt)?,
             StorageType::GCS => create_gcs_storage(&opt)?,
             StorageType::Azure => create_azure_storage(&opt)?,
