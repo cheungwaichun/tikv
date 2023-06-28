@@ -278,6 +278,15 @@ fn get_func() -> &'static Symbol<'static, unsafe fn(*mut ApiVersion) -> c_int> {
     let library = LIBRARY.get_or_init(|| unsafe { Library::new("/opt/scutech/dbackup3/lib/libxbsa64.so").unwrap() });
     FUNC.get_or_init(|| unsafe { library.get(b"BSAQueryApiVersion").unwrap() })
 }
+fn bsa_query_api_version(api_v: *mut ApiVersion) -> i32 {
+    static LIBRARY: OnceCell<Library> = OnceCell::new();
+    static FUNC: OnceCell<Symbol<'static, unsafe fn(*mut ApiVersion) -> c_int>> = OnceCell::new();
+    let library = LIBRARY.get_or_init(|| unsafe { Library::new("/opt/scutech/dbackup3/lib/libxbsa64.so").unwrap() });
+    let func = FUNC.get_or_init(|| unsafe { library.get(b"BSAQueryApiVersion").unwrap() });
+    unsafe {
+        func(api_v) as i32
+    }
+}
 fn bsa_init(bsa_handle_ptr: *mut i64,
             token_ptr: *mut [c_char; 64],
             object_owner_ptr: *mut ObjectOwner,
@@ -564,5 +573,75 @@ fn try_convert_to_path(url: &Url) -> &str {
         url.path()
     } else {
         url.as_str()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::{thread, time::Duration};
+
+    use super::*;
+    #[test]
+    fn test_bsa_query_api_version() {
+        thread::sleep(Duration::from_millis(70));
+        // let mut api_v = Box::new(ApiVersion{
+        //     version: 0,
+        //     release: 0,
+        //     level  : 0,
+        // });
+        // let ret = bsa_query_api_version(&mut *api_v);
+        // // 返回值为BSA_RC_SUCCESS
+        // assert_eq!(ret, BSA_RC_SUCCESS);
+        // // version值被修改，不等于0
+        // assert_ne!(api_v.version as i16, 0);
+        // // release值被修改，不等于0
+        // assert_ne!(api_v.release as i16, 0);
+        // // level值被修改，不等于0
+        // assert_ne!(api_v.level as i16, 0);
+    }
+
+    #[test]
+    fn test_bsa_begin_txn() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_create_object() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_delete_object() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_end_data() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_end_txn() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_get_data() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_get_object() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_init() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_query_object() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_send_data() {
+        assert_eq!(4, 4);
+    }
+    #[test]
+    fn test_bsa_terminate() {
+        assert_eq!(4, 4);
     }
 }

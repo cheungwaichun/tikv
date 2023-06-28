@@ -118,6 +118,7 @@ ifneq ($(NO_CLOUD),1)
 ENABLE_FEATURES += cloud-aws
 ENABLE_FEATURES += cloud-gcp
 ENABLE_FEATURES += cloud-azure
+# ENABLE_FEATURES += cloud-storage-dylib
 endif
 
 PROJECT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))

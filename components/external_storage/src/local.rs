@@ -110,6 +110,10 @@ impl ExternalStorage for LocalStorage {
         let mut tmp_f = File::create(&tmp_path).await?;
         tokio::io::copy(&mut reader.0.compat(), &mut tmp_f).await?;
         tmp_f.sync_all().await?;
+
+        info!("save file to local storage";
+        "name" => %name, "base" => %self.base.display());
+
         debug!("save file to local storage";
             "name" => %name, "base" => %self.base.display());
         fs::rename(tmp_path, self.base.join(name)).await?;
